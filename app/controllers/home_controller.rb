@@ -12,12 +12,26 @@ class HomeController < ApplicationController
   end
 
   def return_posts
-    a = Post.all.order(:created_at).reverse!
+    a = Post.all.order(created_at: :desc)
+    hh = {}
+    i = 0
+    j = 0
     a.each do |post|
+      i += 1
+      kh = {"id" => a.id, "text" => a.text, "likes" => a.likes, "date" => a.created_at}
 
-
+      hc = {}
+      post.comments.each do |comment|
+        j += 1
+        kc = {"comment_id" => comment.id, "text" => comment.text, "likes" => comment.likes, "date" => comment.created_at}
+        lc = {j => hc}
+        hc.merge(lc)
+      end
+      wc = {"Comments" => hc}
+      one_post_hash = kh.merge(wc)
+      hh.merge(one_post_hash)
     end
-    render :json => {"text" => "hello"}
+    render :json => hh
   end
 
   def create_new_post #post
@@ -68,7 +82,7 @@ class HomeController < ApplicationController
   end
 
   def remove_comment
-    a = Comment.where(:id => params[:comment_id]).first
+    a = Comment.where(:id => psarams[:comment_id]).first
     hh = {"post_id" => comment.post_id, "text" => comment.text, "likes" => comment.likes, "date" => comment.created_at, "comment_id" => comment.id}
     fail = {"id" => "Null"}
     a.destroy ? render :json => hh : render :json => fail
