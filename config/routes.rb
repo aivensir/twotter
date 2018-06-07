@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   match '/posts', to: 'posts#create_new_post', via: :post
   match '/posts', to: 'posts#edit_post', via: :put
   match '/posts', to: 'posts#remove_post', via: :delete
+  match '/posts/like', to: 'posts#like', via: :put
 
   match '/posts/:post_id', to: 'posts#return_post', via: :get
 
@@ -15,5 +16,6 @@ Rails.application.routes.draw do
   match '/comments', to: 'comments#create_new_comment', via: :post
   match '/comments', to: 'comments#edit_comment', via: :put
   match '/comments', to: 'comments#remove_comment', via: :delete
+  match '/comments/like', to: 'comments#like', via: :put
 
 end
