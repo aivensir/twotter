@@ -1,11 +1,11 @@
 class PostsController < ApplicationController
   #У меня есть печеньки
-
+#a u menya tuc
   def return_posts
     a = Post.all.order(created_at: :desc)
     if a.blank?
       render :json => {"post_id" => "Null"}
-      return                           
+      return
     end
     hh = {}
     a.each do |post|
