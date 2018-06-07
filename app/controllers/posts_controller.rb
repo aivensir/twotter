@@ -1,5 +1,6 @@
 class PostsController < ApplicationController
 
+
   def return_posts
     a = Post.all.order(created_at: :desc)
     if a.blank?
@@ -19,12 +20,13 @@ class PostsController < ApplicationController
   end
 
   def return_post
-    post = Post.where(:id => params[:post_id]).first
+    post = Post.find(params[:post_id])
     if post.blank?
       render :json => {"post_id" => "Null"}, :status => :not_found
       return
     end
     comments_hash = {}
+
     post.comments.each do |comment|
       comments_hash = comments_hash.merge({comment.id => {"comment_id" => comment.id, "text" => comment.text, "likes" => comment.likes, "date" => comment.created_at.to_s, "post_id" => post.id}})
     end
@@ -33,32 +35,42 @@ class PostsController < ApplicationController
    end
 
   def create_new_post #post
-    a = Post.new
+    fail = {"post_text" => "Null"}
+    if params[:text].blank?
+      render :json => fail, :status => :forbidden
+      return
+    end
 
+    a = Post.new
     a.text = params['text']
     a.likes = 0
     a.save!
 
     hh = {"post_id" => a.id, "text" => a.text, "likes" => a.likes, "date" => a.created_at.to_s}
-    fail = {"post_id" => "Null"}
     a.save ? (render :json => hh, :status => :created) : (render :json => fail, :status => :service_unavailable)
   end
 
   def edit_post
-    a = Post.where(:id => params[:post_id]).last
+    fail = {"post_text" => "Null"}
+    if params[:text].blank?
+      render :json => fail, :status => :forbidden
+      return
+    end
+
+    a = Post.find(params[:post_id])
     if a.blank?
       render :json => {"post_id" => "Null"}, :status => :not_found
       return
     end
-    a.text = params[:text]
 
+    a.text = params[:text]
     hh = {"post_id" => a.id, "text" => a.text, "likes" => a.likes, "date" => a.updated_at.to_s}
     fail = {"post_id" => "Null"}
     a.save ? (render :json => hh, :status => :ok) : (render :json => fail, :status => :ok )
   end
 
   def remove_post
-    a = Post.where(:id => params[:post_id]).last
+    a = Post.find(params[:post_id])
     if a.blank?
       render :json => {"post_id" => "Null"}, :status => :not_found
       return
@@ -69,7 +81,7 @@ class PostsController < ApplicationController
   end
 
   def like
-    a = Post.where(:id => params[:post_id]).last
+    a = Post.find(params[:post_id])
     if a.blank?
       render :json => {"post_id" => "Null"}, :status => :not_found
       return
