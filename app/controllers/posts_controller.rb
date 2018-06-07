@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-
+  #У меня есть печеньки
 
   def return_posts
     a = Post.all.order(created_at: :desc)
