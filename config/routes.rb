@@ -19,8 +19,11 @@ Rails.application.routes.draw do
   match '/comments', to: 'comments#remove_comment', via: :delete
   match '/comments/like', to: 'comments#like', via: :put
 
+  match '/users/session', to: 'users#token_auth', via: :post
   match '/users/login', to: 'users#login', via: :post
   match '/users/sign_up', to:'users#create', via: :post
+  match '/users/logout', to:'users#logout', via: :post
+
 
 
 end
