@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   #resources :posts
   #resources :comments
@@ -17,5 +18,9 @@ Rails.application.routes.draw do
   match '/comments', to: 'comments#edit_comment', via: :put
   match '/comments', to: 'comments#remove_comment', via: :delete
   match '/comments/like', to: 'comments#like', via: :put
+
+  match '/users/login', to: 'users#login', via: :post
+  match '/users/sign_up', to:'users#create', via: :post
+
 
 end

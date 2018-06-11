@@ -20,7 +20,7 @@ class PostsController < ApplicationController
   end
 
   def return_post
-    post = Post.find(params[:post_id])
+    post = Post.where(:id => params[:post_id]).first
     if post.blank?
       render :json => {"post_id" => "Null"}, :status => :not_found
       return
@@ -57,7 +57,7 @@ class PostsController < ApplicationController
       return
     end
 
-    a = Post.find(params[:post_id])
+    a = Post.where(:id => params[:post_id]).first
     if a.blank?
       render :json => {"post_id" => "Null"}, :status => :not_found
       return
@@ -70,7 +70,7 @@ class PostsController < ApplicationController
   end
 
   def remove_post
-    a = Post.find(params[:post_id])
+    a = Post.where(:id => params[:post_id]).first
     if a.blank?
       render :json => {"post_id" => "Null"}, :status => :not_found
       return
@@ -81,7 +81,7 @@ class PostsController < ApplicationController
   end
 
   def like
-    a = Post.find(params[:post_id])
+    a = Post.where(:id => params[:post_id]).first
     if a.blank?
       render :json => {"post_id" => "Null"}, :status => :not_found
       return

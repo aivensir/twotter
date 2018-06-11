@@ -10,7 +10,7 @@ class CommentsController < ApplicationController
       return
     end
 
-    a = Post.find(params[:post_id])
+    a = Post.where(:id => params[:post_id]).first
     comment = a.comments.create(text: params[:text])
     hh = {"post_id" => comment.post_id, "text" => comment.text, "likes" => comment.likes, "date" => comment.created_at.to_s, "comment_id" => comment.id}
     render :json => hh, :status => :created
@@ -23,7 +23,7 @@ class CommentsController < ApplicationController
       return
     end
 
-    comment = Comment.find(params[:comment_id])
+    comment = Comment.where(:id => params[:comment_id]).first
     if comment.blank?
       render :json => {"comment_id" => "Null"}, :status => :not_found
       return
@@ -36,7 +36,7 @@ class CommentsController < ApplicationController
   end
 
   def remove_comment
-    comment = Comment.find(params[:comment_id])
+    comment = Comment.where(:id => params[:comment_id]).first
     if comment.blank?
       render :json => {"comment_id" => "Null"}, :status => :not_found
       return
@@ -47,7 +47,7 @@ class CommentsController < ApplicationController
   end
 
   def like
-    comment = Comment.find(params[:comment_id])
+    comment = Comment.where(:id => params[:comment_id]).first
     if comment.blank?
       render :json => {"comment_id" => "Null"}, :status => :not_found
       return
