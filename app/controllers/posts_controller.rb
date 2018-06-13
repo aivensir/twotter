@@ -60,13 +60,14 @@ class PostsController < ApplicationController
 
 
   def edit_post
+    puts "!!!!!!!#{params}!!!!!!!!!!!"
     fail = {'post_text' => 'Null'}
     if params[:text].blank?
       render :json => fail, :status => :forbidden
       return
     end
     a = Post.where(:id => params[:post_id]).first
-    user = User.where(:auth_token => params[:auth_token])
+    user = User.where(:auth_token => params[:auth_token]).first ##########
     if user.blank?
       render :json => {'Error!' => "You're not logged in."}, :status => :forbidden
       return

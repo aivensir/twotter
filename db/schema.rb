@@ -52,7 +52,7 @@ ActiveRecord::Schema.define(version: 2018_06_11_133150) do
     t.boolean "suspended", default: false
     t.string "username", default: "", null: false
     t.string "auth_token", default: "", null: false
-    t.datetime "auth_token_created_at", default: "2018-06-11 11:24:43", null: false
+    t.datetime "auth_token_created_at", default: "2018-06-13 12:39:51", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

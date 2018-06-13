@@ -15,10 +15,13 @@ class CommentsController < ApplicationController
       render :json => fail, :status => :forbidden
       return
     end
+    puts "!!!!!!!!!!!#{params}!!!!!!!!!!!!!"
 
     a = Post.where(:id => params[:post_id]).first
     comment = a.comments.create(text: params[:text])
-    hh = {'post_id' => comment.post_id, 'text' => comment.text, 'likes' => comment.likes, 'date' => comment.created_at.to_s, 'comment_id' => comment.id}
+    comment.user_id = user.id
+    comment.save!
+    hh = {'post_id' => comment.post_id, 'text' => comment.text, 'likes' => comment.likes, 'date' => comment.created_at.to_s, 'comment_id' => comment.id, 'user_id' => user.id }
     render :json => hh, :status => :created
   end
 
