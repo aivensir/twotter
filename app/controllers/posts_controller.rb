@@ -4,7 +4,7 @@ class PostsController < ApplicationController
   def return_posts
     a = Post.all.order(created_at: :desc)
     if a.blank?
-      render :json => {'Error!' => 'Null'}, :status => :not_found
+      render :json => {'error' => 'Null'}, :status => :not_found
       return
     end
     hh = {}
@@ -23,7 +23,7 @@ class PostsController < ApplicationController
   def return_post
     post = Post.where(:id => params[:post_id]).first
     if post.blank?
-      render :json => {'Error!' => 'Null'}, :status => :not_found
+      render :json => {'error' => 'Null'}, :status => :not_found
       return
     end
     comments_hash = {}
@@ -37,14 +37,14 @@ class PostsController < ApplicationController
 
 
   def create_new_post #post
-    fail = {'Error!' => 'Null'}
+    fail = {'error' => 'Null'}
     if params[:text].blank?
       render :json => fail, :status => :forbidden
       return
     end
     user = User.where(:auth_token => params[:auth_token]).first
     if user.blank?
-      render :json => {'Error!' => "1You're not logged in."}, :status => :forbidden
+      render :json => {'error' => "1You're not logged in."}, :status => :forbidden
       return
     end
 
@@ -68,15 +68,15 @@ class PostsController < ApplicationController
     a = Post.where(:id => params[:post_id]).first
     user = User.where(:auth_token => params[:auth_token]).first ##########
     if user.blank?
-      render :json => {'Error!' => "You're not logged in."}, :status => :forbidden
+      render :json => {'error' => "You're not logged in."}, :status => :forbidden
       return
     end
     if a.blank?
-      render :json => {'Error!' => 'Null'}, :status => :not_found
+      render :json => {'error' => 'Null'}, :status => :not_found
       return
     end
     if a.user_id != user.id
-      render :json =>{'Error!' => "This post isn't yours"}, :status => :forbidden
+      render :json =>{'error' => "This post isn't yours"}, :status => :forbidden
       return
     end
 
@@ -91,20 +91,20 @@ class PostsController < ApplicationController
     a = Post.where(:id => params[:post_id]).first
     user = User.where(:auth_token => params[:auth_token]).first
     if a.blank?
-      render :json => {'Error!' => 'Post does not exist.'}, :status => :not_found
+      render :json => {'error' => 'Post does not exist.'}, :status => :not_found
       return
     end
     if user.blank?
-      render :json => {'Error!' => "You're not logged in."}, :status => :forbidden
+      render :json => {'error' => "You're not logged in."}, :status => :forbidden
       return
     end
     if a.user_id != user.id
-      render :json =>{'Error!' => "This post isn't yours"}, :status => :forbidden
+      render :json =>{'error' => "This post isn't yours"}, :status => :forbidden
       return
     end
 
     hh = {'post_id' => a.id, 'text' => a.text, 'likes' => a.likes, 'date' => a.created_at.to_s, 'username' => User.find(a.user_id).username}
-    fail = {'Error!' => 'Null'}
+    fail = {'error' => 'Null'}
     a.destroy ? (render :json => hh, :status => :ok) : (render :json => fail, :status => :not_found)
   end
 
@@ -113,11 +113,11 @@ class PostsController < ApplicationController
     a = Post.where(:id => params[:post_id]).first
     user = User.where(:auth_token => params[:auth_token]).first
     if a.blank?
-      render :json => {'Error!' => 'Null'}, :status => :not_found
+      render :json => {'error' => 'Null'}, :status => :not_found
       return
     end
     if user.blank?
-      render :json => {'Error!' => "You're not logged in."}, :status => :forbidden
+      render :json => {'error' => "You're not logged in."}, :status => :forbidden
       return
     end
 
