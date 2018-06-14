@@ -60,7 +60,6 @@ class PostsController < ApplicationController
 
 
   def edit_post
-    puts "!!!!!!!#{params}!!!!!!!!!!!"
     fail = {'post_text' => 'Null'}
     if params[:text].blank?
       render :json => fail, :status => :forbidden
