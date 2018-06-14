@@ -15,7 +15,6 @@ class CommentsController < ApplicationController
       render :json => fail, :status => :forbidden
       return
     end
-    puts "!!!!!!!!!!!#{params}!!!!!!!!!!!!!"
 
     a = Post.where(:id => params[:post_id]).first
     comment = a.comments.create(text: params[:text])
