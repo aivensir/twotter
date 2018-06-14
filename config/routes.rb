@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   match '/posts', to: 'posts#edit_post', via: :put
   match '/posts', to: 'posts#remove_post', via: :delete
   match '/posts/like', to: 'posts#like', via: :put
+  match '/posts/dislike', to: 'posts#dislike', via: :delete
+
 
   match '/posts/:post_id', to: 'posts#return_post', via: :get
 
@@ -18,6 +20,8 @@ Rails.application.routes.draw do
   match '/comments', to: 'comments#edit_comment', via: :put
   match '/comments', to: 'comments#remove_comment', via: :delete
   match '/comments/like', to: 'comments#like', via: :put
+  match '/comments/dislike', to: 'comments#dislike', via: :delete
+
 
   match '/users/session', to: 'users#token_auth', via: :post
   match '/users/login', to: 'users#login', via: :post

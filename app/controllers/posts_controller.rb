@@ -127,4 +127,22 @@ class PostsController < ApplicationController
     a.save ? (render :json => hh, :status => :ok) : (render :json => fail, :status => :service_unavailable)
   end
 
+  def dislike
+    a = Post.where(:id => params[:post_id]).first
+    user = User.where(:auth_token => params[:auth_token]).first
+    if a.blank?
+      render :json => {'error' => 'Null'}, :status => :not_found
+      return
+    end
+    if user.blank?
+      render :json => {'error' => "You're not logged in."}, :status => :forbidden
+      return
+    end
+
+    a.likes = a.likes - 1
+    hh = {'post_id' => a.id, 'text' => a.text, 'likes' => a.likes, 'date' => a.created_at.to_s, 'username' => User.find(a.user_id).username}
+    fail = {'post_id' => 'Null'}
+    a.save ? (render :json => hh, :status => :ok) : (render :json => fail, :status => :service_unavailable)
+  end
+
 end
