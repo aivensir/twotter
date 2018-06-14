@@ -89,4 +89,9 @@ class UsersController < ApplicationController
   def change_password
 
   end
+
+
+  def reset_password
+
+  end
 end
