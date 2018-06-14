@@ -3,13 +3,14 @@ class UsersController < ApplicationController
   def create
     a = User.new
     a.email = params[:email].downcase
-    a.username = params[:name].downcase
+    a.username = params[:name]
     a.password = params[:password]
     a.save!
 
     salt = "#{Time.now.to_i + Random.new.rand}"
     secret = "#{salt}#{a.id}"
     a.auth_token = Digest::MD5.hexdigest secret
+    a.auth_token_created_at = Time.now.to_s
     a.save!
 
     render :json => {'user_id' => a.id,
@@ -58,6 +59,7 @@ class UsersController < ApplicationController
             salt = "#{Time.now.to_i + Random.new.rand}"
             secret = "#{salt}#{a.id}"
             a.auth_token = Digest::MD5.hexdigest secret
+            a.auth_token_created_at = Time.now.to_s
             a.save!
           end
           render :json => {'user_id' => a.id,

@@ -20,7 +20,7 @@ class CommentsController < ApplicationController
     comment = a.comments.create(text: params[:text])
     comment.user_id = user.id
     comment.save!
-    hh = {'post_id' => comment.post_id, 'text' => comment.text, 'likes' => comment.likes, 'date' => comment.created_at.to_s, 'comment_id' => comment.id, 'user_id' => user.id }
+    hh = {'post_id' => comment.post_id, 'text' => comment.text, 'likes' => comment.likes, 'date' => comment.created_at.to_s, 'comment_id' => comment.id, 'username' => User.find(comment.user_id).username }
     render :json => hh, :status => :created
   end
 
@@ -49,7 +49,7 @@ class CommentsController < ApplicationController
     end
     comment.text = params[:text]
 
-    hh = {'post_id' => comment.post_id, 'text' => comment.text, 'likes' => comment.likes, 'date' => comment.updated_at.to_s, 'comment_id' => comment.id }
+    hh = {'post_id' => comment.post_id, 'text' => comment.text, 'likes' => comment.likes, 'date' => comment.updated_at.to_s, 'comment_id' => comment.id, 'username' => User.find(comment.user_id).username }
     fail = {'Error!' => 'Null'}
     comment.save ? (render :json => hh, :status => :ok) : (render :json => fail, :status => :service_unavailable)
   end
@@ -70,7 +70,7 @@ class CommentsController < ApplicationController
       render :json => {'comment_id' => 'Null'}, :status => :not_found
       return
     end
-    hh = {'post_id' => comment.post_id, 'text' => comment.text, 'likes' => comment.likes, 'date' => comment.created_at.to_s, 'comment_id' => comment.id}
+    hh = {'post_id' => comment.post_id, 'text' => comment.text, 'likes' => comment.likes, 'date' => comment.created_at.to_s, 'comment_id' => comment.id, 'username' => User.find(comment.user_id).username}
     fail = {'Error!' => 'Null'}
     comment.destroy ? (render :json => hh, :status => :ok) : (render :json => fail, :status => :service_unavailable)
   end
@@ -93,7 +93,7 @@ class CommentsController < ApplicationController
       return
     end
     comment.likes = comment.likes + 1
-    hh = {'post_id' => comment.post_id, 'text' => comment.text, 'likes' => comment.likes, 'date' => comment.created_at.to_s, 'comment_id' => comment.id }
+    hh = {'post_id' => comment.post_id, 'text' => comment.text, 'likes' => comment.likes, 'date' => comment.created_at.to_s, 'comment_id' => comment.id, 'username' => User.find(comment.user_id).username}
     fail = {'comment_id' => 'Null'}
 
     comment.save ? (render :json => hh, :status => :ok) : (render :json => fail, :status => :service_unavailable)
