@@ -76,8 +76,7 @@ class UsersController < ApplicationController
       end
   end
 
-
-  def logout
+ def logout
     a = User.where(:auth_token => params[:auth_token]).last
     if a.blank?
       render :json => {'error' => 'No user with this token.'}, status: :not_found
@@ -85,15 +84,26 @@ class UsersController < ApplicationController
     end
     a.auth_token = ""
     a.save!
-    render :json => {}
+    render :json => {}, status: :ok
   end
 
   def change_password
-
-  end
-
-
-  def reset_password
-
+    a = User.find_by auth_token: params[:auth_token]
+    if a.blank?
+      render :json => {'Error!' => 'No user with this token!'}, status: :not_found
+      return
+    end
+    if a.valid_password?(params[:password])
+      a.password = params[:new_password]
+      a.save!
+      render :json => {'user_id' => a.id,
+                       'email' => a.email,
+                       'name' => a.username,
+                       'auth_token' => a.auth_token,
+                       'pic' => 'https://pp.userapi.com/c837427/v837427976/139fb/QEKQiag5mak.jpg'
+      }, status: :ok
+    else
+      render :json => {'Error!' => 'Invalid password'}, status: :forbidden
+    end
   end
 end
