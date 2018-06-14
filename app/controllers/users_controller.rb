@@ -90,7 +90,7 @@ class UsersController < ApplicationController
   def change_password
     a = User.find_by auth_token: params[:auth_token]
     if a.blank?
-      render :json => {'Error!' => 'No user with this token!'}, status: :not_found
+      render :json => {'error' => 'No user with this token!'}, status: :not_found
       return
     end
     if a.valid_password?(params[:password])
@@ -103,7 +103,7 @@ class UsersController < ApplicationController
                        'pic' => 'https://pp.userapi.com/c837427/v837427976/139fb/QEKQiag5mak.jpg'
       }, status: :ok
     else
-      render :json => {'Error!' => 'Invalid password'}, status: :forbidden
+      render :json => {'error' => 'Invalid password'}, status: :forbidden
     end
   end
 end

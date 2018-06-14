@@ -77,6 +77,7 @@ class CommentsController < ApplicationController
 
 
   def like
+    #params auth_token, comment_id
     user = User.where(:auth_token => params[:auth_token]).first
     if user.blank?
       render :json => {'error' => "You're not logged in."}, :status => :forbidden
@@ -100,7 +101,8 @@ class CommentsController < ApplicationController
   end
 
   def dislike
-    user = User.where(:auth_token => params[:auth_token]).first
+  #params auth_token, comment_id
+  user = User.where(:auth_token => params[:auth_token]).first
     if user.blank?
       render :json => {'error' => "You're not logged in."}, :status => :forbidden
       return
