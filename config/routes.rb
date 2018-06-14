@@ -23,7 +23,6 @@ Rails.application.routes.draw do
   match '/users/login', to: 'users#login', via: :post
   match '/users/sign_up', to:'users#create', via: :post
   match '/users/logout', to:'users#logout', via: :post
-
-
+  match '/users/change_password', to:'users#change_password', via: :put
 
 end
