@@ -6,11 +6,11 @@ class CommentsController < ApplicationController
   def create_new_comment
     user = User.where(:auth_token => params[:auth_token]).first
     if user.blank?
-      render :json => {'Error!' => "You're not logged in."}, :status => :forbidden
+      render :json => {'error' => "You're not logged in."}, :status => :forbidden
       return
     end
 
-    fail = {'Error!' => 'Null'}
+    fail = {'error' => 'Null'}
     if params[:text].blank?
       render :json => fail, :status => :forbidden
       return
@@ -27,7 +27,7 @@ class CommentsController < ApplicationController
   def edit_comment
     user = User.where(:auth_token => params[:auth_token]).first
     if user.blank?
-      render :json => {'Error!' => "You're not logged in."}, :status => :forbidden
+      render :json => {'error' => "You're not logged in."}, :status => :forbidden
       return
     end
 
@@ -39,18 +39,18 @@ class CommentsController < ApplicationController
 
     comment = Comment.where(:id => params[:comment_id]).first
     if comment.user_id != user.id
-      render :json =>{'Error!' => "This post isn't yours"}, :status => :forbidden
+      render :json =>{'error' => "This post isn't yours"}, :status => :forbidden
       return
     end
 
     if comment.blank?
-      render :json => {'Error!' => 'Null'}, :status => :not_found
+      render :json => {'error' => 'Null'}, :status => :not_found
       return
     end
     comment.text = params[:text]
 
     hh = {'post_id' => comment.post_id, 'text' => comment.text, 'likes' => comment.likes, 'date' => comment.updated_at.to_s, 'comment_id' => comment.id, 'username' => User.find(comment.user_id).username }
-    fail = {'Error!' => 'Null'}
+    fail = {'error' => 'Null'}
     comment.save ? (render :json => hh, :status => :ok) : (render :json => fail, :status => :service_unavailable)
   end
 
@@ -58,12 +58,12 @@ class CommentsController < ApplicationController
   def remove_comment
     user = User.where(:auth_token => params[:auth_token]).first
     if user.blank?
-      render :json => {'Error!' => "You're not logged in."}, :status => :forbidden
+      render :json => {'error' => "You're not logged in."}, :status => :forbidden
       return
     end
     comment = Comment.where(:id => params[:comment_id]).first
     if comment.user_id != user.id
-      render :json =>{'Error!' => "This post isn't yours"}, :status => :forbidden
+      render :json =>{'error' => "This post isn't yours"}, :status => :forbidden
       return
     end
     if comment.blank?
@@ -71,28 +71,53 @@ class CommentsController < ApplicationController
       return
     end
     hh = {'post_id' => comment.post_id, 'text' => comment.text, 'likes' => comment.likes, 'date' => comment.created_at.to_s, 'comment_id' => comment.id, 'username' => User.find(comment.user_id).username}
-    fail = {'Error!' => 'Null'}
+    fail = {'error' => 'Null'}
     comment.destroy ? (render :json => hh, :status => :ok) : (render :json => fail, :status => :service_unavailable)
   end
 
 
   def like
+    #params auth_token, comment_id
     user = User.where(:auth_token => params[:auth_token]).first
     if user.blank?
-      render :json => {'Error!' => "You're not logged in."}, :status => :forbidden
+      render :json => {'error' => "You're not logged in."}, :status => :forbidden
       return
     end
     comment = Comment.where(:id => params[:comment_id]).first
     if comment.user_id != user.id
-      render :json =>{'Error!' => "This post isn't yours"}, :status => :forbidden
+      render :json =>{'error' => "This post isn't yours"}, :status => :forbidden
       return
     end
 
     if comment.blank?
-      render :json => {'Error!' => 'Null'}, :status => :not_found
+      render :json => {'error' => 'Null'}, :status => :not_found
       return
     end
     comment.likes = comment.likes + 1
+    hh = {'post_id' => comment.post_id, 'text' => comment.text, 'likes' => comment.likes, 'date' => comment.created_at.to_s, 'comment_id' => comment.id, 'username' => User.find(comment.user_id).username}
+    fail = {'comment_id' => 'Null'}
+
+    comment.save ? (render :json => hh, :status => :ok) : (render :json => fail, :status => :service_unavailable)
+  end
+
+  def dislike
+  #params auth_token, comment_id
+  user = User.where(:auth_token => params[:auth_token]).first
+    if user.blank?
+      render :json => {'error' => "You're not logged in."}, :status => :forbidden
+      return
+    end
+    comment = Comment.where(:id => params[:comment_id]).first
+    if comment.user_id != user.id
+      render :json =>{'error' => "This post isn't yours"}, :status => :forbidden
+      return
+    end
+
+    if comment.blank?
+      render :json => {'error' => 'Null'}, :status => :not_found
+      return
+    end
+    comment.likes = comment.likes - 1
     hh = {'post_id' => comment.post_id, 'text' => comment.text, 'likes' => comment.likes, 'date' => comment.created_at.to_s, 'comment_id' => comment.id, 'username' => User.find(comment.user_id).username}
     fail = {'comment_id' => 'Null'}
 
