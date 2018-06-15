@@ -5,21 +5,26 @@ class UsersController < ApplicationController
     a.email = params[:email].downcase
     a.username = params[:name]
     a.password = params[:password]
-    a.save!
 
-    salt = "#{Time.now.to_i + Random.new.rand}"
-    secret = "#{salt}#{a.id}"
-    a.auth_token = Digest::MD5.hexdigest secret
-    a.auth_token_created_at = Time.now.to_s
-    a.save!
+    if User.where(:username => a.username).blank?
+      salt = "#{Time.now.to_i + Random.new.rand}"
+      secret = "#{salt}#{a.id}"
+      a.auth_token = Digest::MD5.hexdigest secret
+      a.auth_token_created_at = Time.now.to_s
+      a.save!
 
-    render :json => {'user_id' => a.id,
-                     'email' => a.email,
-                     'name' => a.username,
-                     'auth_token' => a.auth_token,
-                     'pic' => 'https://pp.userapi.com/c837427/v837427976/139fb/QEKQiag5mak.jpg'
-                    }, status: :ok
-    return
+      render :json => {'user_id' => a.id,
+                       'email' => a.email,
+                       'name' => a.username,
+                       'auth_token' => a.auth_token,
+                       'pic' => 'https://pp.userapi.com/c837427/v837427976/139fb/QEKQiag5mak.jpg'
+                      }, status: :ok
+      return
+    else
+      render :json => {'error' => 'User already exists!'
+      }, status: :forbidden
+      return
+    end
   end
 
 
