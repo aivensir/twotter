@@ -88,7 +88,7 @@ class UsersController < ApplicationController
   end
 
   def change_password
-    a = User.find_by auth_token: params[:auth_token]
+    a = User.where(:auth_token => params[:auth_token]).first
     if a.blank?
       render :json => {'error' => 'No user with this token!'}, status: :not_found
       return
