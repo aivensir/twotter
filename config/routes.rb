@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   #resources :comments
 
   #get '/posts', to: 'home#return_posts'
-  match '/posts(/:auth_token)', :constraints => { :auth_token => /[a-f0-9]\d{32}/ }, to: 'posts#return_posts', via: :get
+  match '/posts(?auth_token=)', :constraints => { :auth_token => /[a-f0-9]\d{32}/ }, to: 'posts#return_posts', via: :get
   match '/posts', to: 'posts#create_new_post', via: :post
   match '/posts', to: 'posts#edit_post', via: :put
   match '/posts', to: 'posts#remove_post', via: :delete
